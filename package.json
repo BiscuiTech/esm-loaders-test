@@ -4,19 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.mjs",
-    "start-loader": "node --experimental-loader ./loader.js index.mjs",
-    "start-swc": "node -r @swc-node/register index.mjs",
-    "start-swc-register": "node swc-register.js --run index.mjs"
+    "start": "node --experimental-json-modules --import ./register-hooks.mjs ./src/index.mjs",
+    "type-check": "tsc --noEmit"
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "@swc/core": "^1.3.90"
-  },
   "dependencies": {
+    "@swc/core": "^1.3.90",
     "@swc-node/loader": "^1.3.8",
     "@swc-node/register": "^1.6.8",
-    "@swc/register": "^0.1.10"
+    "@swc/register": "^0.1.10",
+    "resolve": "^1.22.6",
+    "typescript": "^5.2.2"
   }
 }
