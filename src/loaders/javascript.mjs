@@ -40,7 +40,10 @@ export async function processJavascriptFile(url, context, nextLoad) {
   //   throw err;
   // });
 
-  const rawSource = Buffer.from(nextloaded.source).toString("utf-8");
+  const rawSource =
+    typeof nextloaded.source === "string"
+      ? nextloaded.source
+      : Buffer.from(nextloaded.source).toString("utf-8");
   console.log({
     rawSource,
     nextloaded,
@@ -64,6 +67,7 @@ export async function processJavascriptFile(url, context, nextLoad) {
       //   legacyDecorator: typescriptExtension.test(url) ? false : true,
       //   decoratorMetadata: typescriptExtension.test(url) ? true : false,
       // },
+      externalHelpers: true,
       experimental: {
         keepImportAttributes: true,
         emitAssertForImportAttributes: true,
@@ -79,12 +83,14 @@ export async function processJavascriptFile(url, context, nextLoad) {
         // ],
       },
     },
+    // resolveFully: true,
     module: {
       // type: /\.c(ts|js)x?$/.test(url) ? "commonjs" : "es6",
       type: nextloaded.format === "module" ? "es6" : "commonjs",
       // lazy: true,
       // ignoreDynamic: true,
-      // importInterop: "node",
+      // resolveFully: true,
+      // importInterop: "swc",
     },
     //todo
     // sourceMaps: 'inline',
@@ -101,7 +107,10 @@ export async function processJavascriptFile(url, context, nextLoad) {
     sourceMaps: true,
     inlineSourcesContent: true,
     inputSourceMap: true,
-  }).catch((err) => console.log(err));
+  }).catch((err) => {
+    console.error(err);
+    throw new Error(err);
+  });
 
   const code = payload?.code ?? "";
 
@@ -110,7 +119,8 @@ export async function processJavascriptFile(url, context, nextLoad) {
 
   return {
     // format: /\.c(ts|js)x?$/.test(url) ? "commonjs" : "module",
-    format: "module",
+    // format: "module",
+    format: /\.cjs/.test(url) ? "commonjs" : "module",
     shortCircuit: true,
     source: code,
   };
@@ -158,4 +168,6 @@ function containsCJS(source) {
   if (/require\(/.test(src) && !/createRequire\(/.test(src)) {
     return true;
   }
+
+  return false;
 }

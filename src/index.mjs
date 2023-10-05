@@ -1,7 +1,8 @@
-import { fromCJS } from "./cjs.js";
-import { fromTS } from "./ts.ts";
+// import { fromCJSLike } from "./cjs-like.js";
+import { fromCJS } from "./cjs.cjs";
 import { fromESM } from "./esm.mjs";
-import { fromESMLike } from "./esm-like.js";
+import { fromTS } from "./ts";
+import { fromESMLike } from "./esm-like";
 
 console.log("test");
 

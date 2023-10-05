@@ -29,7 +29,18 @@ export async function resolve(specifier, context, next) {
       basedir: dirname(parentPath),
       // For whatever reason, --experimental-specifier-resolution=node doesn't search for .mjs extensions
       // but it does search for index.mjs files within directories
-      extensions: [".js", ".json", ".node", ".mjs"],
+      extensions: [
+        ".js",
+        ".jsx",
+        ".cjs",
+        ".mjs",
+        ".ts",
+        ".tsx",
+        ".mts",
+        ".cts",
+        ".json",
+        ".node",
+      ],
     });
     url = pathToFileURL(resolution).href;
   } catch (error) {
